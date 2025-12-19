@@ -1,0 +1,75 @@
+/* Fix for messages not visible in chat dark theme */
+
+/* Ensure messages area is visible and has proper background */
+#messagesArea {
+    position: relative;
+    background-color: #efeae2 !important;
+}
+
+[data-theme="dark"] #messagesArea,
+html.dark #messagesArea {
+    background-color: #0b141a !important;
+}
+
+/* Ensure message bubbles are visible */
+.message-bubble {
+    display: flex !important;
+    flex-direction: column !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Sent messages (right side) */
+.message-tail-sent {
+    background-color: #d9fdd3 !important;
+    color: #000 !important;
+}
+
+[data-theme="dark"] .message-tail-sent,
+html.dark .message-tail-sent {
+    background-color: #005c4b !important;
+    color: #fff !important;
+}
+
+/* Received messages (left side) */
+.message-tail-received {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+[data-theme="dark"] .message-tail-received,
+html.dark .message-tail-received {
+    background-color: #202c33 !important;
+    color: #e9edef !important;
+}
+
+/* Message text color fix */
+.message-bubble .break-words {
+    color: inherit !important;
+}
+
+/* Date dividers */
+.message-bubble+div[class*="justify-center my-4"] {
+    display: flex !important;
+}
+
+/* Ensure text is visible in both themes */
+[data-theme="light"] .message-bubble,
+html:not(.dark) .message-bubble {
+    color: #111827;
+}
+
+[data-theme="dark"] .message-bubble,
+html.dark .message-bubble {
+    color: #e9edef;
+}
+
+/* Fix for timestamp visibility */
+.message-bubble [class*="text-gray-500"] {
+    opacity: 0.7;
+}
+
+[data-theme="dark"] .message-bubble [class*="text-gray-500"],
+html.dark .message-bubble [class*="text-gray-400"] {
+    color: #8696a0 !important;
+}

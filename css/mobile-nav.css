@@ -1,0 +1,108 @@
+/* ==========================================
+   MOBILE NAVIGATION IMPROVEMENTS
+   Add these styles to your style.css file
+   ========================================== */
+
+/* Hamburger to X Animation */
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    width: 32px;
+    height: 32px;
+    position: relative;
+    padding: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hamburger lines using pseudo-elements */
+.navbar-toggle::before,
+.navbar-toggle::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 2.5px;
+    background: currentColor;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+}
+
+.navbar-toggle::before {
+    top: 8px;
+}
+
+.navbar-toggle::after {
+    bottom: 8px;
+    /* Middle bar created with box-shadow */
+    box-shadow: 0 -8px 0 0 currentColor;
+}
+
+/* Animate to X when menu is active */
+.navbar-toggle.active::before {
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+}
+
+.navbar-toggle.active::after {
+    bottom: 50%;
+    transform: translateX(-50%) translateY(50%) rotate(-45deg);
+    box-shadow: none;
+    /* Hide middle bar */
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .navbar-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-primary);
+        flex-direction: column;
+        padding: 1.5rem;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .navbar-menu.active {
+        display: flex;
+    }
+
+    /* Show hamburger on mobile */
+    .navbar-toggle {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Theme switcher adjustments for mobile */
+    .navbar-menu .theme-switcher {
+        position: static;
+        width: 100%;
+    }
+
+    .navbar-menu .theme-btn {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 0.75rem 1rem;
+        background: var(--bg-secondary);
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Theme dropdown always visible in mobile */
+    .navbar-menu .theme-dropdown {
+        position: static !important;
+        display: block !important;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        padding-left: 1rem;
+        animation: none;
+    }
+}

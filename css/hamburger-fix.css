@@ -1,0 +1,34 @@
+/* Hamburger menu fix for mobile navigation */
+
+@media (max-width: 768px) {
+    .navbar-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(26, 31, 46, 0.98);
+        flex-direction: column;
+        padding: var(--space-lg);
+        gap: var(--space-md);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .navbar-menu.active {
+        display: flex;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .theme-switcher {
+        width: 100%;
+    }
+
+    .theme-dropdown {
+        right: auto;
+        left: 0;
+    }
+}

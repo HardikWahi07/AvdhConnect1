@@ -1,0 +1,186 @@
+/* Chat Theme Synchronization Fix */
+/* This ensures Tailwind dark mode classes work with our data-theme attribute */
+
+/* Default (light mode on root) */
+html[data-theme="light"] .dark\:bg-\[#111b21\],
+html[data-theme="light"] .dark\:bg-\[#202c33\],
+html[data-theme="light"] .dark\:bg-\[#0b141a\],
+html[data-theme="light"] .dark\:bg-\[#222e35\],
+html[data-theme="light"] .dark\:bg-\[#2a3942\],
+html[data-theme="light"] .dark\:text-gray-100,
+html[data-theme="light"] .dark\:text-gray-200,
+html[data-theme="light"] .dark\:text-gray-300,
+html[data-theme="light"] .dark\:text-gray-400,
+html[data-theme="light"] .dark\:border-gray-700,
+html[data-theme="light"] .dark\:border-gray-800,
+html[data-theme="light"] .dark\:hover\:bg-gray-700,
+html[data-theme="light"] .dark\:hover\:bg-gray-800,
+html[data-theme="light"] .dark\:hover\:text-gray-200 {
+    /* Disabled in light mode - keep defaults */
+}
+
+/* Dark mode */
+html.dark .dark\:bg-\[#111b21\],
+html[data-theme="dark"] .dark\:bg-\[#111b21\] {
+    background-color: #111b21 !important;
+}
+
+html.dark .dark\:bg-\[#202c33\],
+html[data-theme="dark"] .dark\:bg-\[#202c33\] {
+    background-color: #202c33 !important;
+}
+
+html.dark .dark\:bg-\[#0b141a\],
+html[data-theme="dark"] .dark\:bg-\[#0b141a\] {
+    background-color: #0b141a !important;
+}
+
+html.dark .dark\:bg-\[#222e35\],
+html[data-theme="dark"] .dark\:bg-\[#222e35\] {
+    background-color: #222e35 !important;
+}
+
+html.dark .dark\:bg-\[#2a3942\],
+html[data-theme="dark"] .dark\:bg-\[#2a3942\] {
+    background-color: #2a3942 !important;
+}
+
+html.dark .dark\:text-gray-100,
+html[data-theme="dark"] .dark\:text-gray-100 {
+    color: #f3f4f6 !important;
+}
+
+html.dark .dark\:text-gray-200,
+html[data-theme="dark"] .dark\:text-gray-200 {
+    color: #e5e7eb !important;
+}
+
+html.dark .dark\:text-gray-300,
+html[data-theme="dark"] .dark\:text-gray-300 {
+    color: #d1d5db !important;
+}
+
+html.dark .dark\:text-gray-400,
+html[data-theme="dark"] .dark\:text-gray-400 {
+    color: #9ca3af !important;
+}
+
+html.dark .dark\:border-gray-700,
+html[data-theme="dark"] .dark\:border-gray-700 {
+    border-color: #374151 !important;
+}
+
+html.dark .dark\:border-gray-800,
+html[data-theme="dark"] .dark\:border-gray-800 {
+    border-color: #1f2937 !important;
+}
+
+html.dark .dark\:hover\:bg-gray-700:hover,
+html[data-theme="dark"] .dark\:hover\:bg-gray-700:hover {
+    background-color: #374151 !important;
+}
+
+html.dark .dark\:hover\:bg-gray-800:hover,
+html[data-theme="dark"] .dark\:hover\:bg-gray-800:hover {
+    background-color: #1f2937 !important;
+}
+
+html.dark .dark\:hover\:text-gray-200:hover,
+html[data-theme="dark"] .dark\:hover\:text-gray-200:hover {
+    color: #e5e7eb !important;
+}
+
+html.dark .dark\:ring-gray-700,
+html[data-theme="dark"] .dark\:ring-gray-700 {
+    --tw-ring-color: #374151 !important;
+}
+
+html.dark .dark\:bg-gray-900,
+html[data-theme="dark"] .dark\:bg-gray-900 {
+    background-color: #111827 !important;
+}
+
+html.dark .dark\:focus-within\:bg-\[#2a3942\]:focus-within,
+html[data-theme="dark"] .dark\:focus-within\:bg-\[#2a3942\]:focus-within {
+    background-color: #2a3942 !important;
+}
+
+html.dark .dark\:focus-within\:border-gray-600:focus-within,
+html[data-theme="dark"] .dark\:focus-within\:border-gray-600:focus-within {
+    border-color: #4b5563 !important;
+}
+
+/* System Theme Support */
+@media (prefers-color-scheme: dark) {
+    html[data-theme="system"] .dark\:bg-\[#111b21\] {
+        background-color: #111b21 !important;
+    }
+
+    html[data-theme="system"] .dark\:bg-\[#202c33\] {
+        background-color: #202c33 !important;
+    }
+
+    html[data-theme="system"] .dark\:bg-\[#0b141a\] {
+        background-color: #0b141a !important;
+    }
+
+    html[data-theme="system"] .dark\:bg-\[#222e35\] {
+        background-color: #222e35 !important;
+    }
+
+    html[data-theme="system"] .dark\:bg-\[#2a3942\] {
+        background-color: #2a3942 !important;
+    }
+
+    html[data-theme="system"] .dark\:text-gray-100 {
+        color: #f3f4f6 !important;
+    }
+
+    html[data-theme="system"] .dark\:text-gray-200 {
+        color: #e5e7eb !important;
+    }
+
+    html[data-theme="system"] .dark\:text-gray-300 {
+        color: #d1d5db !important;
+    }
+
+    html[data-theme="system"] .dark\:text-gray-400 {
+        color: #9ca3af !important;
+    }
+
+    html[data-theme="system"] .dark\:border-gray-700 {
+        border-color: #374151 !important;
+    }
+
+    html[data-theme="system"] .dark\:border-gray-800 {
+        border-color: #1f2937 !important;
+    }
+
+    html[data-theme="system"] .dark\:hover\:bg-gray-700:hover {
+        background-color: #374151 !important;
+    }
+
+    html[data-theme="system"] .dark\:hover\:bg-gray-800:hover {
+        background-color: #1f2937 !important;
+    }
+
+    html[data-theme="system"] .dark\:hover\:text-gray-200:hover {
+        color: #e5e7eb !important;
+    }
+
+    html[data-theme="system"] .dark\:ring-gray-700 {
+        --tw-ring-color: #374151 !important;
+    }
+
+    html[data-theme="system"] .dark\:bg-gray-900 {
+        background-color: #111827 !important;
+    }
+
+    html[data-theme="system"] .dark\:focus-within\:bg-\[#2a3942\]:focus-within {
+        background-color: #2a3942 !important;
+    }
+
+    html[data-theme="system"] .dark\:focus-within\:border-gray-600:focus-within {
+        border-color: #4b5563 !important;
+    }
+}
