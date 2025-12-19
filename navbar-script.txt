@@ -1,0 +1,65 @@
+
+<script>
+// ============ MOBILE MENU ============
+document.getElementById('navToggle').onclick = function() {
+    var menu = document.getElementById('navMenu');
+    var btn = document.getElementById('navToggle');
+    menu.classList.toggle('active');
+    btn.classList.toggle('active');
+};
+
+// ============ THEME SWITCHER ============
+var currentTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', currentTheme);
+document.getElementById('themeIcon').textContent = currentTheme === 'dark' ? '🌙' : currentTheme === 'light' ? '☀️' : '💻';
+
+document.getElementById('themeBtn').onclick = function(e) {
+    e.stopPropagation();
+    document.getElementById('themeDropdown').classList.toggle('active');
+};
+
+document.onclick = function() {
+    document.getElementById('themeDropdown').classList.remove('active');
+};
+
+document.getElementById('themeDropdown').onclick = function(e) {
+    e.stopPropagation();
+};
+
+var themeButtons = document.querySelectorAll('.theme-option');
+for (var i = 0; i < themeButtons.length; i++) {
+    themeButtons[i].onclick = function() {
+        var theme = this.getAttribute('data-theme');
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        document.getElementById('themeIcon').textContent = theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '💻';
+        document.getElementById('themeDropdown').classList.remove('active');
+        
+        var opts = document.querySelectorAll('.theme-option');
+        for (var j = 0; j < opts.length; j++) {
+            opts[j].classList.remove('active');
+        }
+        this.classList.add('active');
+    };
+}
+
+// ============ AUTH (if supabase loaded) ============
+setTimeout(function() {
+    if (typeof supabase !== 'undefined') {
+        supabase.auth.getSession().then(function(res) {
+            if (res.data && res.data.session) {
+                supabase.from('users').select('*').eq('id', res.data.session.user.id).single().then(function(user) {
+                    if (user.data) {
+                        document.getElementById('authLinks').innerHTML = 
+                            '<div class="flex items-center gap-md">' +
+                            '<span style="color:var(--text-secondary)">Hey, ' + user.data.name + '!</span>' +
+                            '<a href="dashboard.html" class="btn btn-secondary btn-sm">Dashboard</a>' +
+                            '<button onclick="supabase.auth.signOut().then(function(){location.href=\'index.html\'})" class="btn btn-outline btn-sm">Logout</button>' +
+                            '</div>';
+                    }
+                });
+            }
+        });
+    }
+}, 500);
+</script>

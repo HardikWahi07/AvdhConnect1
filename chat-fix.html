@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chat Quick Fix</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .test {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #16a34a;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fef3c7;
+            border-radius: 4px;
+        }
+
+        .error {
+            background: #fee2e2;
+        }
+
+        .success {
+            background: #dcfce7;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔧 Chat Quick Diagnostic & Fix</h1>
+
+    <div class="test">
+        <h3>Step 1: Are you logged in?</h3>
+        <button onclick="checkLogin()">Check Login Status</button>
+        <div id="loginResult"></div>
+    </div>
+
+    <div class="test">
+        <h3>Step 2: Do you have any conversations?</h3>
+        <button onclick="checkConversations()">Check Conversations</button>
+        <div id="convResult"></div>
+    </div>
+
+    <div class="test">
+        <h3>Step 3: Do you have any messages?</h3>
+        <button onclick="checkMessages()">Check Messages</button>
+        <div id="msgResult"></div>
+    </div>
+
+    <div class="test">
+        <h3>Step 4: Can we create a test message?</h3>
+        <button onclick="createTestMessage()">Create Test Message</button>
+        <div id="testResult"></div>
+    </div>
+
+    <div class="test">
+        <h3>Step 5: Open Chat</h3>
+        <button onclick="window.location.href='chat.html'">Go to Chat Page</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+
+    <script>
+        let currentUser = null;
+        let testConvId = null;
+
+        async function checkLogin() {
+            const result = document.getElementById('loginResult');
+            result.innerHTML = 'Checking...';
+
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (error) throw error;
+
+                if (!session) {
+                    result.innerHTML = '<div class="result error">❌ NOT LOGGED IN<br><a href="login.html">Click here to login</a></div>';
+                    return;
+                }
+
+                currentUser = session.user;
+                result.innerHTML = `<div class="result success">✅ LOGGED IN<br>User ID: ${currentUser.id}<br>Email: ${currentUser.email}</div>`;
+            } catch (error) {
+                result.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function checkConversations() {
+            const result = document.getElementById('convResult');
+            result.innerHTML = 'Checking...';
+
+            if (!currentUser) {
+                result.innerHTML = '<div class="result error">Please check login first!</div>';
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('conversations')
+                    .select('*')
+                    .or(`participant1_id.eq.${currentUser.id},participant2_id.eq.${currentUser.id}`);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    result.innerHTML = '<div class="result error">❌ NO CONVERSATIONS FOUND<br>You need to start a chat with someone first!</div>';
+                    return;
+                }
+
+                testConvId = data[0].id;
+                result.innerHTML = `<div class="result success">✅ Found ${data.length} conversation(s)<br>First conversation ID: ${testConvId}</div>`;
+            } catch (error) {
+                result.innerHTML = `<div class="result error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function checkMessages() {
+            const result = document.getElementById('msgResult');
+            result.innerHTML = 'Checking...';
+
+            if (!testConvId) {
+                result.innerHTML = '<div class="result error">Please check conversations first!</div>';
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('messages')
+                    .select('*')
+                    .eq('conversation_id', testConvId)
+                    .order('created_at', { ascending: true });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    result.innerHTML = '<div class="result error">❌ NO MESSAGES FOUND<br>This conversation has no messages yet!</div>';
+                    return;
+                }
+
+                result.innerHTML = `<div class="result success">✅ Found ${data.length} message(s)<br>` +
+                    `Latest: "${data[data.length - 1].content}"<br>` +
+                    `Columns: ${Object.keys(data[0]).join(', ')}</div>`;
+            } catch (error) {
+                result.innerHTML = `<div class="result error">❌ Error: ${error.message}<br>This might be an RLS policy issue!</div>`;
+            }
+        }
+
+        async function createTestMessage() {
+            const result = document.getElementById('testResult');
+            result.innerHTML = 'Creating...';
+
+            if (!testConvId) {
+                result.innerHTML = '<div class="result error">Please check conversations first!</div>';
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('messages')
+                    .insert({
+                        conversation_id: testConvId,
+                        sender_id: currentUser.id,
+                        content: 'TEST MESSAGE - ' + new Date().toLocaleTimeString()
+                    })
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                result.innerHTML = `<div class="result success">✅ MESSAGE CREATED!<br>ID: ${data.id}<br>Content: ${data.content}<br><br>Now try opening the chat page!</div>`;
+            } catch (error) {
+                result.innerHTML = `<div class="result error">❌ Error: ${error.message}<br><br>ISSUE: ${error.hint || 'Check RLS policies or table schema'}</div>`;
+            }
+        }
+    </script>
+</body>
+
+</html>

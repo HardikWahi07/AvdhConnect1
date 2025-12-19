@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Businesses - BizHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hamburger-fix.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+            <button class="navbar-toggle" id="navToggle">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="browse.html" class="navbar-link active">Browse</a></li>
+                <li><a href="search.html" class="navbar-link">Search</a></li>
+                <li>
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="themeBtn"><span id="themeIcon">🌙</span></button>
+                        <div class="theme-dropdown" id="themeDropdown">
+                            <button class="theme-option" data-theme="light"><span>☀️</span> Light</button>
+                            <button class="theme-option" data-theme="dark"><span>🌙</span> Dark</button>
+                            <button class="theme-option" data-theme="system"><span>💻</span> System</button>
+                        </div>
+                    </div>
+                </li>
+                <li id="authLinks"><a href="login.html" class="btn btn-primary btn-sm">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="section">
+        <div class="container">
+            <h1>Browse Businesses</h1>
+            <p class="mb-xl" style="color: var(--text-secondary);">Discover local businesses in your society</p>
+            <div class="mb-xl">
+                <label class="form-label">Filter by Category</label>
+                <select id="categoryFilter" class="form-select" style="max-width: 300px;">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+            <div id="businessesGrid" class="grid grid-3">
+                <div class="flex items-center justify-center spinner" style="grid-column: 1/-1;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/browse.js"></script>
+
+    <script>
+        // ============ MOBILE MENU ============
+        document.getElementById('navToggle').onclick = function () {
+            var menu = document.getElementById('navMenu');
+            var btn = document.getElementById('navToggle');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
+        };
+
+        // ============ THEME SWITCHER ============
+        var currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        document.getElementById('themeIcon').textContent = currentTheme === 'dark' ? '🌙' : currentTheme === 'light' ? '☀️' : '💻';
+
+        document.getElementById('themeBtn').onclick = function (e) {
+            e.stopPropagation();
+            document.getElementById('themeDropdown').classList.toggle('active');
+        };
+
+        document.onclick = function () {
+            document.getElementById('themeDropdown').classList.remove('active');
+        };
+
+        document.getElementById('themeDropdown').onclick = function (e) {
+            e.stopPropagation();
+        };
+
+        var themeButtons = document.querySelectorAll('.theme-option');
+        for (var i = 0; i < themeButtons.length; i++) {
+            themeButtons[i].onclick = function () {
+                var theme = this.getAttribute('data-theme');
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                document.getElementById('themeIcon').textContent = theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '💻';
+                document.getElementById('themeDropdown').classList.remove('active');
+
+                var opts = document.querySelectorAll('.theme-option');
+                for (var j = 0; j < opts.length; j++) {
+                    opts[j].classList.remove('active');
+                }
+                this.classList.add('active');
+            };
+        }
+
+        // ============ AUTH (if supabase loaded) ============
+        setTimeout(function () {
+            if (typeof supabase !== 'undefined') {
+                supabase.auth.getSession().then(function (res) {
+                    if (res.data && res.data.session) {
+                        supabase.from('users').select('*').eq('id', res.data.session.user.id).single().then(function (user) {
+                            if (user.data) {
+                                document.getElementById('authLinks').innerHTML =
+                                    '<div class="flex items-center gap-md">' +
+                                    '<span style="color:var(--text-secondary)">Hey, ' + user.data.name + '!</span>' +
+                                    '<a href="dashboard.html" class="btn btn-secondary btn-sm">Dashboard</a>' +
+                                    '<button onclick="supabase.auth.signOut().then(function(){location.href=\'index.html\'})" class="btn btn-outline btn-sm">Logout</button>' +
+                                    '</div>';
+                            }
+                        });
+                    }
+                });
+            }
+        }, 500);
+    </script>
+</body>
+
+</html>

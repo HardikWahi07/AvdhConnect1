@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Business - BizHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hamburger-fix.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+            <button class="navbar-toggle" id="navToggle">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="browse.html" class="navbar-link">Browse</a></li>
+                <li><a href="search.html" class="navbar-link">Search</a></li>
+                <li>
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="themeBtn"><span id="themeIcon">🌙</span></button>
+                        <div class="theme-dropdown" id="themeDropdown">
+                            <button class="theme-option" data-theme="light"><span>💻</span> Light</button>
+                            <button class="theme-option" data-theme="dark"><span>🌙</span> Dark</button>
+                            <button class="theme-option" data-theme="system"><span>☀️</span> System</button>
+                        </div>
+                    </div>
+                </li>
+                <li id="authLinks"><a href="login.html" class="btn btn-primary btn-sm">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="section" style="background: var(--bg-secondary); min-height: calc(100vh - 80px);">
+        <div class="container" style="max-width: 800px;">
+            <div class="text-center mb-xl">
+                <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">Create Business Listing</h1>
+                <p style="font-size: 1.125rem;">Register your business to reach more customers in your community</p>
+            </div>
+
+            <div class="card"
+                style="background: var(--bg-glass); backdrop-filter: blur(16px); border: 1px solid var(--bg-glass-border); padding: var(--space-xl);">
+                <form id="createBusinessForm">
+                    <!-- Basic Information -->
+                    <div class="mb-xl">
+                        <h3 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: var(--space-lg);">
+                            <span
+                                style="background: var(--primary-500); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem;">1</span>
+                            Basic Information
+                        </h3>
+
+                        <div class="form-group">
+                            <label class="form-label" for="businessName">Business Name *</label>
+                            <input type="text" id="businessName" class="form-input" placeholder="e.g., The Coffee House"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="description">Description *</label>
+                            <textarea id="description" class="form-textarea"
+                                placeholder="Describe what makes your business special..." required></textarea>
+                            <p class="form-helper">Tell your customers about your services, products, and values.</p>
+                        </div>
+
+                        <div class="grid grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="category">Category *</label>
+                                <select id="category" class="form-select" required>
+                                    <option value="">Select category...</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="subcategory">Subcategory</label>
+                                <select id="subcategory" class="form-select">
+                                    <option value="">Select subcategory...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="mb-xl">
+                        <h3 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: var(--space-lg);">
+                            <span
+                                style="background: var(--primary-500); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem;">2</span>
+                            Contact Information
+                        </h3>
+
+                        <div class="grid grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" class="form-input" placeholder="+91 98765 43210" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email</label>
+                                <input type="email" id="email" class="form-input" placeholder="hello@yourbusiness.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="address">Address *</label>
+                            <textarea id="address" class="form-textarea" rows="2" style="min-height: 80px;"
+                                placeholder="Full physical address..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="website">Website</label>
+                            <input type="url" id="website" class="form-input"
+                                placeholder="https://www.yourbusiness.com">
+                        </div>
+                    </div>
+
+                    <!-- Media -->
+                    <div class="mb-xl">
+                        <h3 style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: var(--space-lg);">
+                            <span
+                                style="background: var(--primary-500); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem;">3</span>
+                            Business Media
+                        </h3>
+
+                        <div class="form-group">
+                            <label class="form-label" for="images">Business Images (Max 5)</label>
+                            <input type="file" id="images" class="form-input" accept="image/*" multiple>
+                            <p class="form-helper">Upload high-quality photos of your storefront, products, or services.
+                            </p>
+                        </div>
+
+                        <div id="imagePreview" class="hidden"></div>
+
+                        <div class="form-group mt-lg">
+                            <label class="form-label" for="brochure">Business Brochure (PDF)</label>
+                            <input type="file" id="brochure" class="form-input" accept="application/pdf">
+                            <p class="form-helper">Optional: Upload a PDF catalog or menu for customers to download.</p>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex gap-md mt-xl">
+                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" style="flex: 2;">
+                            Create Business Listing
+                        </button>
+                        <a href="dashboard.html" class="btn btn-secondary btn-lg" style="flex: 1;">Cancel</a>
+                    </div>
+
+                    <div id="errorMessage" class="form-error mt-md hidden"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/ai-service.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/business-create.js"></script>
+</body>
+
+</html>

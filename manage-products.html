@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products - BizHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hamburger-fix.css">
+    <style>
+        .navbar-menu {
+            align-items: center !important;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+            <button class="navbar-toggle" id="navToggle">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="browse.html" class="navbar-link">Browse</a></li>
+                <li><a href="search.html" class="navbar-link">Search</a></li>
+                <li>
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="themeBtn"><span id="themeIcon">🌙</span></button>
+                        <div class="theme-dropdown" id="themeDropdown">
+                            <button class="theme-option" data-theme="light"><span>💻</span> Light</button>
+                            <button class="theme-option" data-theme="dark"><span>🌙</span> Dark</button>
+                            <button class="theme-option active" data-theme="system"><span>☀️</span> System</button>
+                        </div>
+                    </div>
+                </li>
+                <li id="authLinks"><a href="login.html" class="btn btn-primary btn-sm">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="section">
+        <div class="container">
+            <div class="flex justify-between items-center mb-xl">
+                <h1>Manage Products</h1>
+                <button class="btn btn-primary" onclick="openProductModal()">+ Add Product</button>
+            </div>
+
+            <div id="productsGrid" class="grid grid-3">
+                <div class="flex items-center justify-center spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-lg">
+                <h3 id="modalTitle" style="margin: 0;">Add Product</h3>
+                <button class="btn-icon" onclick="closeProductModal()">&times;</button>
+            </div>
+
+            <form id="productForm">
+                <div class="form-group">
+                    <label class="form-label" for="productName">Product Name *</label>
+                    <input type="text" id="productName" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="productDesc">Description</label>
+                    <textarea id="productDesc" class="form-textarea"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="productPrice">Price (₹)</label>
+                    <input type="number" id="productPrice" class="form-input" step="0.01" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="productImages">Images (Max 3)</label>
+                    <input type="file" id="productImages" class="form-input" accept="image/*" multiple>
+                </div>
+
+                <div class="flex gap-md mt-lg">
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/ai-service.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/products.js"></script>
+</body>
+
+</html>

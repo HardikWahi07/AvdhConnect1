@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Debug</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+        }
+
+        pre {
+            background: #000;
+            padding: 10px;
+            border: 1px solid #00ff00;
+            overflow: auto;
+        }
+
+        .error {
+            color: #ff0000;
+        }
+
+        .success {
+            color: #00ff00;
+        }
+
+        .info {
+            color: #ffaa00;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Chat Debug Console</h1>
+
+    <div>
+        <h2>Test 1: Check Messages in Database</h2>
+        <button onclick="checkMessages()">Run Test</button>
+        <pre id="messagesResult">Click to test...</pre>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h2>Test 2: Check Conversations</h2>
+        <button onclick="checkConversations()">Run Test</button>
+        <pre id="conversationsResult">Click to test...</pre>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h2>Test 3: Render Message Manually</h2>
+        <button onclick="testRenderMessage()">Run Test</button>
+        <div id="testRender" style="background: #efeae2; padding: 20px; margin-top: 10px; min-height: 100px;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+
+    <script>
+        async function checkMessages() {
+            const result = document.getElementById('messagesResult');
+            result.textContent = 'Loading...';
+
+            try {
+                const { data: session } = await supabase.auth.getSession();
+                if (!session.data.session) {
+                    result.innerHTML = '<span class="error">Not logged in</span>';
+                    return;
+                }
+
+                const userId = session.data.session.user.id;
+
+                // Get all messages for conversations user is part of
+                const { data: conversations } = await supabase
+                    .from('conversations')
+                    .select('id')
+                    .or(`participant1_id.eq.${userId},participant2_id.eq.${userId}`);
+
+                if (!conversations || conversations.length === 0) {
+                    result.innerHTML = '<span class="info">No conversations found</span>';
+                    return;
+                }
+
+                const convIds = conversations.map(c => c.id);
+
+                const { data: messages, error } = await supabase
+                    .from('messages')
+                    .select('*')
+                    .in('conversation_id', convIds)
+                    .order('created_at', { ascending: false })
+                    .limit(20);
+
+                if (error) {
+                    result.innerHTML = '<span class="error">Error: ' + error.message + '</span>';
+                    return;
+                }
+
+                result.innerHTML = '<span class="success">Found ' + messages.length + ' messages</span>\n\n' +
+                    JSON.stringify(messages, null, 2);
+            } catch (error) {
+                result.innerHTML = '<span class="error">' + error.message + '</span>';
+            }
+        }
+
+        async function checkConversations() {
+            const result = document.getElementById('conversationsResult');
+            result.textContent = 'Loading...';
+
+            try {
+                const { data: session } = await supabase.auth.getSession();
+                if (!session.data.session) {
+                    result.innerHTML = '<span class="error">Not logged in</span>';
+                    return;
+                }
+
+                const userId = session.data.session.user.id;
+
+                const { data: conversations, error } = await supabase
+                    .from('conversations')
+                    .select(`
+                        *,
+                        participant1:participant1_id(id, name),
+                        participant2:participant2_id(id, name),
+                        business:business_id(name)
+                    `)
+                    .or(`participant1_id.eq.${userId},participant2_id.eq.${userId}`);
+
+                if (error) {
+                    result.innerHTML = '<span class="error">Error: ' + error.message + '</span>';
+                    return;
+                }
+
+                result.innerHTML = '<span class="success">Found ' + conversations.length + ' conversations</span>\n\n' +
+                    JSON.stringify(conversations, null, 2);
+            } catch (error) {
+                result.innerHTML = '<span class="error">' + error.message + '</span>';
+            }
+        }
+
+        function testRenderMessage() {
+            const testDiv = document.getElementById('testRender');
+
+            // Create sample message
+            const sampleMessage = {
+                id: 'test-123',
+                content: 'This is a test message to check rendering',
+                created_at: new Date().toISOString(),
+                sender_id: 'me',
+                status: 'read'
+            };
+
+            const currentUserId = 'me';
+            const time = new Date(sampleMessage.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Render as "me" (sent)
+            const div = document.createElement('div');
+            div.className = 'flex mb-2 justify-end';
+            div.innerHTML = `
+                <div class="bg-[#d9fdd3] p-2 px-3 rounded-lg shadow text-sm text-gray-800 flex flex-col max-w-[65%]">
+                    <div class="break-words leading-relaxed">${sampleMessage.content}</div>
+                    <div class="text-[10px] text-gray-500 self-end mt-1">
+                        ${time} ✓✓
+                    </div>
+                </div>
+            `;
+
+            testDiv.innerHTML = '<p style="color: #333; margin-bottom: 10px;">Rendered message:</p>';
+            testDiv.appendChild(div);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BizHub - Premium Society Business Directory">
+  <title>BizHub - Society Business Directory</title>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ai-chatbot.css">
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+
+      <button class="navbar-toggle" id="navToggle">☰</button>
+
+      <ul class="navbar-menu" id="navMenu">
+        <li><a href="index.html" class="navbar-link active">Home</a></li>
+        <li><a href="browse.html" class="navbar-link">Browse</a></li>
+        <li><a href="search.html" class="navbar-link">Search</a></li>
+        <li>
+          <div class="theme-switcher">
+            <button class="theme-btn" id="themeBtn">
+              <span id="themeIcon">🌙</span>
+            </button>
+            <div class="theme-dropdown" id="themeDropdown">
+              <button class="theme-option" data-theme="light">
+                <span>💻</span> Light
+              </button>
+              <button class="theme-option" data-theme="dark">
+                <span>🌙</span> Dark
+              </button>
+              <button class="theme-option active" data-theme="system">
+                <span>☀️</span> System
+              </button>
+            </div>
+          </div>
+        </li>
+        <li id="authLinks">
+          <a href="login.html" class="btn btn-primary btn-sm">Login</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <canvas id="waveCanvas"
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></canvas>
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1>Connecting Local Services</h1>
+      <p>Discover the best services and products in your community. Avadh BizHub is your central directory for
+        everything local.</p>
+      <div class="hero-btns">
+        <a href="browse.html" class="btn btn-primary btn-lg">Browse Businesses</a>
+        <a href="register.html" class="btn btn-outline btn-lg">Register Your Business</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+      <h2 class="text-center mb-xl">Popular Categories</h2>
+      <div class="grid grid-4" id="categoriesGrid">
+        <!-- Categories will be loaded dynamically -->
+        <div class="card text-center">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🍕</div>
+          <h4>Food & Dining</h4>
+          <p>Restaurants, cafes, and food delivery</p>
+        </div>
+        <div class="card text-center">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🛠️</div>
+          <h4>Home Services</h4>
+          <p>Repairs, maintenance, and utilities</p>
+        </div>
+        <div class="card text-center">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🏥</div>
+          <h4>Healthcare</h4>
+          <p>Doctors, clinics, and pharmacies</p>
+        </div>
+        <div class="card text-center">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
+          <h4>Education</h4>
+          <p>Tutors, coaching, and training</p>
+        </div>
+      </div>
+      <div class="text-center mt-xl">
+        <a href="browse.html" class="btn btn-primary">View All Categories</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Businesses -->
+  <section class="section">
+    <div class="container">
+      <h2 class="text-center mb-xl">Featured Businesses</h2>
+      <div class="grid grid-3" id="featuredGrid">
+        <!-- Businesses will be loaded dynamically -->
+        <div class="card">
+          <img src="https://via.placeholder.com/400x200/0099ff/ffffff?text=Business+Image" alt="Business"
+            class="card-img">
+          <h4>Sample Business</h4>
+          <p>Short description of the business and services offered...</p>
+          <a href="#" class="btn btn-outline">View Details</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+      <h2 class="text-center mb-xl">How It Works</h2>
+      <div class="grid grid-3">
+        <div class="card text-center">
+          <div
+            style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem; font-weight: bold;">
+            1</div>
+          <h4>Browse or Search</h4>
+          <p>Find businesses by category or use our powerful search to discover exactly what you need.</p>
+        </div>
+        <div class="card text-center">
+          <div
+            style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem; font-weight: bold;">
+            2</div>
+          <h4>View Details</h4>
+          <p>Explore complete business profiles with photos, products, services, and pricing information.</p>
+        </div>
+        <div class="card text-center">
+          <div
+            style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem; font-weight: bold;">
+            3</div>
+          <h4>Connect Directly</h4>
+          <p>Contact businesses via phone, email, or visit their website to avail services.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics -->
+  <section class="section" style="background: var(--gradient-primary); color: white;">
+    <div class="container">
+      <div class="grid grid-4">
+        <div class="text-center">
+          <h2 style="color: white; font-size: 3rem; margin-bottom: 0.5rem;">50+</h2>
+          <p style="color: rgba(255,255,255,0.9); margin: 0;">Registered Businesses</p>
+        </div>
+        <div class="text-center">
+          <h2 style="color: white; font-size: 3rem; margin-bottom: 0.5rem;">1000+</h2>
+          <p style="color: rgba(255,255,255,0.9); margin: 0;">Happy Residents</p>
+        </div>
+        <div class="text-center">
+          <h2 style="color: white; font-size: 3rem; margin-bottom: 0.5rem;">15+</h2>
+          <p style="color: rgba(255,255,255,0.9); margin: 0;">Categories</p>
+        </div>
+        <div class="text-center">
+          <h2 style="color: white; font-size: 3rem; margin-bottom: 0.5rem;">24/7</h2>
+          <p style="color: rgba(255,255,255,0.9); margin: 0;">Available</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- For Business Owners -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2" style="align-items: center;">
+        <div>
+          <h2>Are You a Business Owner?</h2>
+          <p class="mb-lg">Join BizHub and reach hundreds of potential customers right in your society. Showcase your
+            products, services, and special offers to your neighbors.</p>
+          <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">✨</div>
+              <h4 style="margin-bottom: 0.5rem;">Free Listing</h4>
+              <p style="margin: 0;">Register your business at no cost</p>
+            </div>
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📸</div>
+              <h4 style="margin-bottom: 0.5rem;">Rich Media</h4>
+              <p style="margin: 0;">Upload photos and showcase products</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎯</div>
+              <h4 style="margin-bottom: 0.5rem;">Targeted Reach</h4>
+              <p style="margin: 0;">Connect with local customers</p>
+            </div>
+            <div>
+              <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📊</div>
+              <h4 style="margin-bottom: 0.5rem;">Manage Easily</h4>
+              <p style="margin: 0;">Update anytime from dashboard</p>
+            </div>
+          </div>
+          <a href="register.html" class="btn btn-primary btn-lg">Register Your Business</a>
+        </div>
+        <div class="card" style="background: var(--gradient-primary); color: white; padding: 3rem;">
+          <h3 style="color: white; font-size: 2rem; margin-bottom: 1rem;">🚀 Grow Your Business</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">✓ Unlimited product listings
+            </li>
+            <li style="padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">✓ Professional business
+              profile</li>
+            <li style="padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">✓ Photo gallery showcase
+            </li>
+            <li style="padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">✓ Direct customer contact
+            </li>
+            <li style="padding: 0.75rem 0;">✓ Real-time updates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section" style="background: var(--bg-secondary);">
+    <div class="container text-center">
+      <h2>Ready to Discover Local Businesses?</h2>
+      <p style="max-width: 600px; margin: 0 auto 2rem;">Join hundreds of residents who are already using BizHub to find
+        trusted services and products in their society.</p>
+      <div class="flex justify-center gap-md">
+        <a href="browse.html" class="btn btn-primary btn-lg">Start Exploring</a>
+        <a href="search.html" class="btn btn-secondary btn-lg">Search Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="text-center mb-xl">Why Choose BizHub?</h2>
+      <div class="grid grid-3">
+        <div class="card text-center">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+          <h4>Easy Discovery</h4>
+          <p>Find businesses quickly through our intuitive search and browse features.</p>
+        </div>
+        <div class="card text-center">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🏪</div>
+          <h4>Local Focus</h4>
+          <p>Connect with trusted businesses right in your community.</p>
+        </div>
+        <div class="card text-center">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+          <h4>Always Updated</h4>
+          <p>Get real-time information on products, services, and availability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Chatbot Button -->
+  <button id="aiChatBtn" class="ai-chat-button" aria-label="Open AI Chat">
+    <span class="ai-icon">AI</span>
+  </button>
+
+  <!-- Chat Modal -->
+  <div id="chatModal" class="ai-chat-modal">
+    <div class="ai-chat-container">
+      <div class="ai-chat-header">
+        <h3>AI Assistant</h3>
+        <button id="closeChatBtn" class="close-chat-btn">&times;</button>
+      </div>
+      <div id="chatMessages" class="ai-chat-messages"></div>
+      <div class="ai-chat-input-container">
+        <input type="text" id="chatInput" class="ai-chat-input" placeholder="Ask me anything about BizHub...">
+        <button id="sendChatBtn" class="ai-send-chat-btn">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- App Scripts -->
+  <script src="js/supabase-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ai-service.js"></script>
+  <script src="js/gemini-chatbot.js"></script>
+  <script src="js/wave-animation.js"></script>
+
+  <script>
+    // ============ MOBILE MENU ============
+    document.getElementById('navToggle').onclick = function () {
+      var menu = document.getElementById('navMenu');
+      var btn = document.getElementById('navToggle');
+      menu.classList.toggle('active');
+      btn.classList.toggle('active');
+    };
+
+    // ============ THEME SWITCHER ============
+    var currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    document.getElementById('themeIcon').textContent = currentTheme === 'dark' ? '🌙' : currentTheme === 'light' ? '☀️' : '💻';
+
+    document.getElementById('themeBtn').onclick = function (e) {
+      e.stopPropagation();
+      document.getElementById('themeDropdown').classList.toggle('active');
+    };
+
+    document.onclick = function () {
+      document.getElementById('themeDropdown').classList.remove('active');
+    };
+
+    document.getElementById('themeDropdown').onclick = function (e) {
+      e.stopPropagation();
+    };
+
+    var themeButtons = document.querySelectorAll('.theme-option');
+    for (var i = 0; i < themeButtons.length; i++) {
+      themeButtons[i].onclick = function () {
+        var theme = this.getAttribute('data-theme');
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        document.getElementById('themeIcon').textContent = theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '💻';
+        document.getElementById('themeDropdown').classList.remove('active');
+
+        var opts = document.querySelectorAll('.theme-option');
+        for (var j = 0; j < opts.length; j++) {
+          opts[j].classList.remove('active');
+        }
+        this.classList.add('active');
+      };
+    }
+
+    // ============ AUTH (if supabase loaded) ============
+    setTimeout(function () {
+      if (typeof supabase !== 'undefined') {
+        supabase.auth.getSession().then(function (res) {
+          if (res.data && res.data.session) {
+            supabase.from('users').select('*').eq('id', res.data.session.user.id).single().then(function (user) {
+              if (user.data) {
+                document.getElementById('authLinks').innerHTML = `<div class='flex items-center gap-md'><span style='color:var(--text-secondary)'>Hey, ${user.data.name}!</span><a href='dashboard.html' class='btn btn-secondary btn-sm'>Dashboard</a><a href='chat.html' class='btn btn-outline btn-sm'>Messages</a><button onclick='supabase.auth.signOut().then(function(){location.href="index.html"})' class='btn btn-outline btn-sm'>Logout</button></div>`;
+              }
+            });
+          }
+        });
+      }
+    }, 500);
+  </script>
+</body>
+
+</html>

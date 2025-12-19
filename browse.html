@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Businesses - BizHub</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+            <button class="navbar-toggle" id="navToggle">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="browse.html" class="navbar-link active">Browse</a></li>
+                <li><a href="search.html" class="navbar-link">Search</a></li>
+                <li>
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="themeBtn"><span id="themeIcon">🌙</span></button>
+                        <div class="theme-dropdown" id="themeDropdown">
+                            <button class="theme-option" data-theme="light"><span>☀️</span> Light</button>
+                            <button class="theme-option" data-theme="dark"><span>🌙</span> Dark</button>
+                            <button class="theme-option" data-theme="system"><span>💻</span> System</button>
+                        </div>
+                    </div>
+                </li>
+                <li id="authLinks"><a href="login.html" class="btn btn-primary btn-sm">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="section">
+        <div class="container">
+            <h1>Browse Businesses</h1>
+            <p class="mb-xl" style="color: var(--text-secondary);">Discover local businesses in your society</p>
+            <div class="mb-xl">
+                <label class="form-label">Filter by Category</label>
+                <select id="categoryFilter" class="form-select" style="max-width: 300px;">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+            <div id="businessesGrid" class="grid grid-3">
+                <div class="flex items-center justify-center spinner" style="grid-column: 1/-1;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-lg">
+                <h2 id="contactBusinessName">Contact Business</h2>
+                <button class="btn-icon" onclick="closeContactModal()">&times;</button>
+            </div>
+            <div class="contact-details">
+                <div class="mb-md">
+                    <label class="text-sm text-secondary">Phone</label>
+                    <p id="contactPhone" class="text-lg font-medium">Not available</p>
+                </div>
+                <div class="mb-md">
+                    <label class="text-sm text-secondary">Email</label>
+                    <p id="contactEmail" class="text-lg font-medium">Not available</p>
+                </div>
+                <div class="mb-md">
+                    <label class="text-sm text-secondary">Address</label>
+                    <p id="contactAddress" class="text-lg">Not available</p>
+                </div>
+                <div class="mt-xl text-center">
+                    <a id="callBtn" href="#" class="btn btn-primary w-full mb-sm">Call Now</a>
+                    <a id="emailBtn" href="#" class="btn btn-outline w-full mb-sm">Send Email</a>
+                    <button id="modalChatBtn" class="btn btn-secondary w-full">Message via App 💬</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/browse.js"></script>
+</body>
+</body>
+
+</html>

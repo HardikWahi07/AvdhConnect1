@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - BizHub</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+
+            <button class="navbar-toggle" id="navToggle">
+                ☰
+            </button>
+
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="browse.html" class="navbar-link">Browse</a></li>
+                <li><a href="search.html" class="navbar-link">Search</a></li>
+                <li><a href="dashboard.html" class="navbar-link active">Dashboard</a></li>
+                <li>
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="themeBtn">
+                            <span id="themeIcon">🌙</span>
+                        </button>
+                        <div class="theme-dropdown" id="themeDropdown">
+                            <button class="theme-option" data-theme="light">
+                                <span>💻</span> Light
+                            </button>
+                            <button class="theme-option" data-theme="dark">
+                                <span>🌙</span> Dark
+                            </button>
+                            <button class="theme-option active" data-theme="system">
+                                <span>☀️</span> System
+                            </button>
+                        </div>
+                    </div>
+                </li>
+                <li id="authLinks">
+                    <a href="login.html" class="btn btn-primary btn-sm">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" style="padding-top: 6rem; padding-bottom: 4rem;">
+        <h1 class="mb-xl">Dashboard</h1>
+
+        <!-- User Info Card -->
+        <div class="card mb-xl">
+            <h3>Profile Information</h3>
+            <div id="userInfo" class="mt-md">
+                <div class="flex items-center gap-md spinner"></div>
+            </div>
+        </div>
+
+        <!-- Business Section (Only for business accounts) -->
+        <div id="businessSection" class="hidden">
+            <div class="flex justify-between items-center mb-lg">
+                <h2>My Business</h2>
+                <a href="create-business.html" id="createBusinessBtn" class="btn btn-primary">
+                    + Create Business Listing
+                </a>
+            </div>
+
+            <!-- Analytics Overview -->
+            <div id="analyticsSection" class="hidden mb-xl">
+                <h3 class="mb-md">Analytics Overview</h3>
+                <div class="grid grid-3 mb-xl" style="gap: 1.5rem;">
+                    <!-- Total Views -->
+                    <div class="analytics-card">
+                        <div class="analytics-card-content">
+                            <div class="analytics-label">Total Views</div>
+                            <div class="analytics-value" id="analyticsViews">0</div>
+                            <div class="analytics-trend" id="analyticsTrendViews">
+                                <span class="trend-indicator">↑ 0%</span> this week
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile Clicks -->
+                    <div class="analytics-card">
+                        <div class="analytics-card-content">
+                            <div class="analytics-label">Profile Clicks</div>
+                            <div class="analytics-value" id="analyticsClicks">0</div>
+                            <div class="analytics-trend" id="analyticsTrendClicks">
+                                <span class="trend-indicator">↑ 0%</span> this week
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Inquiries -->
+                    <div class="analytics-card">
+                        <div class="analytics-card-content">
+                            <div class="analytics-label">Inquiries</div>
+                            <div class="analytics-value" id="analyticsInquiries">0</div>
+                            <div class="analytics-trend" id="analyticsTrendInquiries">
+                                <span class="trend-indicator">↑ 0%</span> this week
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <!-- Charts -->
+                <div class="card mb-xl">
+                    <h4 style="margin-bottom: 1rem;">Views (Last 7 Days)</h4>
+                    <div style="height: 300px; width: 100%;">
+                        <canvas id="viewsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="businessContent">
+                <!-- Business cards will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

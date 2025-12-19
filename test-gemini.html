@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gemini API Test</title>
+</head>
+
+<body>
+    <h1>Gemini API Test</h1>
+    <button onclick="testAPI()">Test API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+
+            const API_KEY = 'AIzaSyCTaWfaQHZIsHE73_oitO_U7MXnCgnLwyE';
+
+            // Try different model names
+            const modelsToTest = [
+                'gemini-1.5-flash-latest',
+                'gemini-1.5-flash',
+                'gemini-1.5-flash-002',
+                'gemini-pro'
+            ];
+
+            for (const model of modelsToTest) {
+                try {
+                    resultDiv.innerHTML += `<br><br>Testing ${model}...`;
+
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-goog-api-key': API_KEY
+                        },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{ text: 'Say hello' }]
+                            }]
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        resultDiv.innerHTML += `<br>✅ ${model} WORKS! Response: ${data.candidates[0].content.parts[0].text}`;
+                        break; // Stop on first success
+                    } else {
+                        resultDiv.innerHTML += `<br>❌ ${model} failed: ${response.status} ${response.statusText}`;
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML += `<br>❌ ${model} error: ${error.message}`;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

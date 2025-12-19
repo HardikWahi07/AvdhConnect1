@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Businesses - Avadh BizHub</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Specific styles for search page layout */
+        :root {
+            --accent-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        }
+
+        .search-page-container {
+            padding: var(--space-xl) 0;
+            min-height: calc(100vh - 80px);
+            background: var(--bg-primary);
+        }
+
+        .search-sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-search-box {
+            position: relative;
+            margin-bottom: var(--space-xl);
+        }
+
+        .sidebar-search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+        }
+
+        .filter-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .filter-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-md);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .filter-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            user-select: none;
+        }
+
+        .filter-checkbox input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .filter-checkbox input:checked~.checkmark {
+            background: var(--primary-500);
+            border-color: var(--primary-500);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .filter-checkbox input:checked~.checkmark:after {
+            display: block;
+        }
+
+        .sidebar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            margin-top: var(--space-xl);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .search-main {
+            flex: 1;
+        }
+
+        /* Updated Card Styles for Search */
+        .search-main .card {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .search-main .card-img-wrapper {
+            width: 100%;
+            height: 200px;
+            border-radius: 0;
+            margin: 0;
+            border: none;
+        }
+
+        .search-main .card-content {
+            padding: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(245, 158, 11, 0.1);
+            color: #F59E0B;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: var(--space-sm);
+            width: fit-content;
+        }
+
+        .search-main .card h4 {
+            text-align: left;
+            margin-bottom: var(--space-xs);
+            font-size: 1.25rem;
+        }
+
+        .search-main .card p {
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            flex: 1;
+        }
+
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+
+        .ai-floating-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 50%;
+            color: var(--gray-900);
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .ai-floating-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .lang-switcher {
+            margin-right: var(--space-md);
+        }
+
+        .lang-select {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 900px) {
+            .search-page-container .flex {
+                flex-direction: column;
+            }
+
+            .search-sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <img src="assets/logo.png" alt="" style="height: 32px; margin-right: 10px;"
+                    onerror="this.style.display='none'">
+                Avadh BizHub
+            </a>
+
+            <button class="navbar-toggle" id="navToggle">☰</button>
+
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="browse.html" class="navbar-link">Directory</a></li>
+                <li><a href="login.html" class="navbar-link">Login</a></li>
+                <li>
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="themeBtn">
+                            <span id="themeIcon">🌙</span>
+                        </button>
+                    </div>
+                </li>
+                <li>
+                    <div class="lang-switcher">
+                        <select class="lang-select">
+                            <option>English</option>
+                            <option>Hindi</option>
+                        </select>
+                    </div>
+                </li>
+                <li id="authLinks">
+                    <a href="login.html" class="btn btn-primary btn-sm"
+                        style="background: var(--accent-gradient); color: #000; border: none;">Business Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="search-page-container">
+        <div class="container flex gap-xl">
+            <!-- Sidebar Filters -->
+            <aside class="search-sidebar">
+                <div class="sidebar-search-box">
+                    <input type="text" id="searchInput" placeholder="Search businesses by name, c..."
+                        class="sidebar-search-input">
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <div class="filter-section">
+                    <h4 class="filter-title">CATEGORY</h4>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-checkbox-group">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="openNow">
+                            <span class="checkmark"></span>
+                            Open Now
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="offersAvailable">
+                            <span class="checkmark"></span>
+                            Offers Available
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="hasCatalog">
+                            <span class="checkmark"></span>
+                            Has Catalog
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="topRated">
+                            <span class="checkmark"></span>
+                            Top Rated
+                        </label>
+                    </div>
+                </div>
+
+                <div class="sidebar-actions">
+                    <button class="btn btn-primary btn-block" onclick="performSearch()"
+                        style="background: var(--accent-gradient); color: #000; border: none;">Apply</button>
+                    <button class="btn btn-secondary btn-block" onclick="clearFilters()">Clear</button>
+                </div>
+            </aside>
+
+            <!-- Results Area -->
+            <main class="search-main">
+                <div id="searchResults" class="grid grid-2">
+                    <!-- Results will be loaded here -->
+                    <div class="search-placeholder"
+                        style="grid-column: 1 / -1; text-align: center; padding: var(--space-3xl); color: var(--text-tertiary);">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+                        <h3>Find what you need</h3>
+                        <p>Enter a search term or use filters to find businesses</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- AI Floating Button -->
+    <button class="ai-floating-btn" id="aiChatBtn">
+        AI
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/search.js"></script>
+
+    <script>
+        // ============ MOBILE MENU ============
+        document.getElementById('navToggle').onclick = function () {
+            var menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        };
+
+        // ============ THEME SWITCHER ============
+        var currentTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        document.getElementById('themeIcon').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+
+        document.getElementById('themeBtn').onclick = function () {
+            var theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            document.getElementById('themeIcon').textContent = theme === 'dark' ? '🌙' : '☀️';
+        };
+
+        // ============ AUTH ============
+        if (typeof supabase !== 'undefined') {
+            supabase.auth.getSession().then(function (res) {
+                if (res.data && res.data.session) {
+                    supabase.from('users').select('*').eq('id', res.data.session.user.id).single().then(function (user) {
+                        if (user.data) {
+                            document.getElementById('authLinks').innerHTML =
+                                '<div class="flex items-center gap-md">' +
+                                '<a href="dashboard.html" class="btn btn-secondary btn-sm">Dashboard</a>' +
+                                '</div>';
+                        }
+                    });
+                }
+            });
+        }
+
+        // Clear filters
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = 'all';
+            document.querySelectorAll('.filter-checkbox input').forEach(cb => cb.checked = false);
+            performSearch();
+        }
+    </script>
+</body>
+
+</html>

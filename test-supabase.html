@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test</title>
+</head>
+
+<body>
+    <h1>Supabase Connection Test</h1>
+    <div id="results"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script>
+        const resultsDiv = document.getElementById('results');
+
+        async function testConnection() {
+            resultsDiv.innerHTML = '<p>Testing Supabase connection...</p>';
+
+            try {
+                // Test 1: Check if supabase is initialized
+                resultsDiv.innerHTML += '<p>✅ Supabase client initialized</p>';
+
+                // Test 2: Try to fetch from users table
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .limit(1);
+
+                if (error) {
+                    resultsDiv.innerHTML += `<p style="color: red;">❌ Error fetching users: ${error.message}</p>`;
+                    resultsDiv.innerHTML += `<p style="color: red;">Error details: ${JSON.stringify(error)}</p>`;
+                } else {
+                    resultsDiv.innerHTML += `<p style="color: green;">✅ Successfully connected to users table!</p>`;
+                    resultsDiv.innerHTML += `<p>Found ${data?.length || 0} users</p>`;
+                }
+
+                // Test 3: Check auth
+                const { data: session } = await supabase.auth.getSession();
+                if (session?.session) {
+                    resultsDiv.innerHTML += `<p style="color: green;">✅ User is logged in: ${session.session.user.email}</p>`;
+                } else {
+                    resultsDiv.innerHTML += `<p style="color: orange;">⚠️ No active session</p>`;
+                }
+
+            } catch (err) {
+                resultsDiv.innerHTML += `<p style="color: red;">❌ Exception: ${err.message}</p>`;
+                console.error('Test error:', err);
+            }
+        }
+
+        testConnection();
+    </script>
+</body>
+
+</html>

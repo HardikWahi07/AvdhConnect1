@@ -1,0 +1,106 @@
+<!-- COMPLETE NAVBAR - Copy this into your HTML files -->
+<nav class="navbar">
+    <div class="container navbar-container">
+        <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+        <button class="navbar-toggle" id="navToggle">☰</button>
+        <ul class="navbar-menu" id="navMenu">
+            <li><a href="index.html" class="navbar-link">Home</a></li>
+            <li><a href="browse.html" class="navbar-link">Browse</a></li>
+            <li><a href="search.html" class="navbar-link">Search</a></li>
+            <li>
+                <div class="theme-switcher">
+                    <button class="theme-btn" id="themeBtn"><span id="themeIcon">🌙</span></button>
+                    <div class="theme-dropdown" id="themeDropdown">
+                        <button class="theme-option" data-theme="light"><span>☀️</span> Light</button>
+                        <button class="theme-option" data-theme="dark"><span>🌙</span> Dark</button>
+                        <button class="theme-option" data-theme="system"><span>💻</span> System</button>
+                    </div>
+                </div>
+            </li>
+            <li id="authLinks"><a href="login.html" class="btn btn-primary btn-sm">Login</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    // NAVBAR FUNCTIONALITY - Put this before closing </body> tag
+    (function () {
+        'use strict';
+
+        // Mobile Menu Toggle
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', function () {
+                navMenu.classList.toggle('active');
+                navToggle.classList.toggle('active');
+            });
+        }
+
+        // Theme Switching
+        const themeIcons = { light: '☀️', dark: '🌙', system: '💻' };
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+
+            const themeIcon = document.getElementById('themeIcon');
+            if (themeIcon) themeIcon.textContent = themeIcons[theme] || '🌙';
+
+            document.querySelectorAll('.theme-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.theme === theme);
+            });
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        // Theme dropdown toggle
+        const themeBtn = document.getElementById('themeBtn');
+        const themeDropdown = document.getElementById('themeDropdown');
+
+        if (themeBtn && themeDropdown) {
+            themeBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                themeDropdown.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function () {
+                themeDropdown.classList.remove('active');
+            });
+
+            themeDropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        }
+
+        // Theme option clicks
+        document.querySelectorAll('.theme-option').forEach(function (option) {
+            option.addEventListener('click', function () {
+                const theme = this.dataset.theme;
+                applyTheme(theme);
+                if (themeDropdown) themeDropdown.classList.remove('active');
+            });
+        });
+
+        // Auth Links (if Supabase is available)
+        if (typeof supabase !== 'undefined') {
+            const authLinks = document.getElementById('authLinks');
+            if (authLinks) {
+                supabase.auth.getSession().then(function (result) {
+                    const session = result.data.session;
+                    if (session && session.user) {
+                        supabase.from('users').select('*').eq('id', session.user.id).single()
+                            .then(function (result) {
+                                if (result.data) {
+                                    authLinks.innerHTML = '<div class="flex items-center gap-md"><span style="color: var(--text-secondary);">Hey, ' + result.data.name + '!</span><a href="dashboard.html" class="btn btn-secondary btn-sm">Dashboard</a><a href="chat.html" class="btn btn-outline btn-sm">Messages</a><button onclick="supabase.auth.signOut().then(function() { window.location.href=\'index.html\'; })" class="btn btn-outline btn-sm">Logout</button></div>';
+                                }
+                            });
+                    }
+                });
+            }
+        }
+    })();
+</script>

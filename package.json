@@ -1,0 +1,11 @@
+{
+  "name": "bizhub-directory",
+  "version": "1.0.0",
+  "description": "Society Business Directory Application",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 3000 -o"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

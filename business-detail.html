@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Details - BizHub</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ai-chatbot.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+            <button class="navbar-toggle" id="navToggle">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="browse.html" class="navbar-link active">Browse</a></li>
+                <li><a href="search.html" class="navbar-link">Search</a></li>
+                <li>
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="themeBtn"><span id="themeIcon">🌙</span></button>
+                        <div class="theme-dropdown" id="themeDropdown">
+                            <button class="theme-option" data-theme="light"><span>💻</span> Light</button>
+                            <button class="theme-option" data-theme="dark"><span>🌙</span> Dark</button>
+                            <button class="theme-option active" data-theme="system"><span>☀️</span> System</button>
+                        </div>
+                    </div>
+                </li>
+                <li id="authLinks"><a href="login.html" class="btn btn-primary btn-sm">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="section">
+        <div class="container" id="businessContent">
+            <div class="flex items-center justify-center spinner"></div>
+        </div>
+        <div class="container" style="margin-top: 2rem; text-align: center;">
+            <button id="messageOwnerBtn" class="btn btn-primary" style="display: none;" onclick="startChat()">Message
+                Owner 💬</button>
+            <a id="downloadBrochureBtn" class="btn btn-secondary" style="display: none; margin-left: 10px;"
+                target="_blank">Download Brochure 📄</a>
+        </div>
+    </div>
+
+    <!-- AI Chatbot Button -->
+    <button id="aiChatBtn" class="ai-chat-button" aria-label="Open AI Chat">
+        <span class="ai-icon">AI</span>
+    </button>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="ai-chat-modal">
+        <div class="ai-chat-container">
+            <div class="ai-chat-header">
+                <h3>AI Assistant</h3>
+                <button id="closeChatBtn" class="close-chat-btn">&times;</button>
+            </div>
+            <div id="chatMessages" class="ai-chat-messages"></div>
+            <div class="ai-chat-input-container">
+                <input type="text" id="chatInput" class="ai-chat-input" placeholder="Ask me anything about BizHub...">
+                <button id="sendChatBtn" class="ai-send-chat-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- App Scripts -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/business-detail.js"></script>
+    <script src="js/ai-service.js"></script>
+    <script src="js/gemini-chatbot.js"></script>
+
+    <script>
+        // ============ MOBILE MENU ============
+        document.getElementById('navToggle').onclick = function () {
+            var menu = document.getElementById('navMenu');
+            var btn = document.getElementById('navToggle');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
+        };
+
+        // ============ THEME SWITCHER ============
+        var currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        document.getElementById('themeIcon').textContent = currentTheme === 'dark' ? '🌙' : currentTheme === 'light' ? '💻' : '☀️';
+
+        document.getElementById('themeBtn').onclick = function (e) {
+            e.stopPropagation();
+            document.getElementById('themeDropdown').classList.toggle('active');
+        };
+
+        document.onclick = function () {
+            document.getElementById('themeDropdown').classList.remove('active');
+        };
+
+        document.getElementById('themeDropdown').onclick = function (e) {
+            e.stopPropagation();
+        };
+
+        var themeButtons = document.querySelectorAll('.theme-option');
+        for (var i = 0; i < themeButtons.length; i++) {
+            themeButtons[i].onclick = function () {
+                var theme = this.getAttribute('data-theme');
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                document.getElementById('themeIcon').textContent = theme === 'dark' ? '🌙' : theme === 'light' ? '💻' : '☀️';
+                document.getElementById('themeDropdown').classList.remove('active');
+
+                var opts = document.querySelectorAll('.theme-option');
+                for (var j = 0; j < opts.length; j++) {
+                    opts[j].classList.remove('active');
+                }
+                this.classList.add('active');
+            };
+        }
+
+        // ============ AUTH (if supabase loaded) ============
+        setTimeout(function () {
+            if (typeof supabase !== 'undefined') {
+                supabase.auth.getSession().then(function (res) {
+                    if (res.data && res.data.session) {
+                        supabase.from('users').select('*').eq('id', res.data.session.user.id).single().then(function (user) {
+                            if (user.data) {
+                                document.getElementById('authLinks').innerHTML = `<div class='flex items-center gap-md'><span style='color:var(--text-secondary)'>Hey, ${user.data.name}!</span><a href='dashboard.html' class='btn btn-secondary btn-sm'>Dashboard</a><button onclick='supabase.auth.signOut().then(function(){location.href="index.html"})' class='btn btn-outline btn-sm'>Logout</button></div>`;
+                            }
+                        });
+                    }
+                });
+            }
+        }, 500);
+    </script>
+</body>
+
+</html>

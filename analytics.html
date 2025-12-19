@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Analytics - BizHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hamburger-fix.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: #1a1a1a;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid #333;
+            transition: transform 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .metric-label {
+            color: #999;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-sub {
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        .chart-container {
+            background: #1a1a1a;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid #333;
+            height: 400px;
+            margin-bottom: 2rem;
+        }
+
+        .date-filter {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .business-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="index.html" class="navbar-logo">🏢 BizHub</a>
+            <button class="navbar-toggle" id="navToggle">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="dashboard.html" class="navbar-link active">Dashboard</a></li>
+                <li>
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="themeBtn"><span id="themeIcon">🌙</span></button>
+                        <div class="theme-dropdown" id="themeDropdown">
+                            <button class="theme-option" data-theme="light"><span>💻</span> Light</button>
+                            <button class="theme-option" data-theme="dark"><span>🌙</span> Dark</button>
+                            <button class="theme-option active" data-theme="system"><span>☀️</span> System</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 6rem; padding-bottom: 4rem;">
+        <!-- Header -->
+        <div class="business-header">
+            <div>
+                <a href="dashboard.html" class="btn btn-outline btn-sm mb-sm">← Back to Dashboard</a>
+                <h1 id="businessName" class="mb-sm">Loading...</h1>
+                <p id="businessMeta" style="color: var(--text-secondary);">Analytics Overview</p>
+            </div>
+
+            <select id="dateRange" class="date-filter">
+                <option value="7">Last 7 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 3 Months</option>
+            </select>
+        </div>
+
+        <!-- Metrics -->
+        <div class="analytics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Total Views</div>
+                <div class="metric-value" id="totalViews">0</div>
+                <div class="metric-sub" id="viewsSub">Loading...</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Profile Clicks</div>
+                <div class="metric-value" id="totalClicks">0</div>
+                <div class="metric-sub" id="clicksSub">Loading...</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Inquiries</div>
+                <div class="metric-value" id="totalInquiries">0</div>
+                <div class="metric-sub" id="inquiriesSub">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Main Chart -->
+        <div class="chart-container">
+            <h3 style="color: white; margin-bottom: 1rem;">Performance Trends</h3>
+            <div style="height: 320px; width: 100%;">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </div>
+
+        <div id="errorState" class="hidden" style="text-align: center; padding: 4rem; color: var(--error);">
+            <h3>Error Loading Analytics</h3>
+            <p id="errorMessage">Please try again later</p>
+            <a href="dashboard.html" class="btn btn-primary mt-md">Return to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/analytics.js"></script>
+
+    <script>
+        // Inline Theme Logic
+        var currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        document.getElementById('themeIcon').textContent = currentTheme === 'dark' ? '🌙' : currentTheme === 'light' ? '💻' : '☀️';
+
+        document.getElementById('themeBtn').onclick = function (e) {
+            e.stopPropagation();
+            document.getElementById('themeDropdown').classList.toggle('active');
+        };
+
+        document.onclick = function () {
+            document.getElementById('themeDropdown').classList.remove('active');
+        };
+
+        document.getElementById('themeDropdown').onclick = function (e) {
+            e.stopPropagation();
+        };
+
+        var themeButtons = document.querySelectorAll('.theme-option');
+        for (var i = 0; i < themeButtons.length; i++) {
+            themeButtons[i].onclick = function () {
+                var theme = this.getAttribute('data-theme');
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                document.getElementById('themeIcon').textContent = theme === 'dark' ? '🌙' : theme === 'light' ? '💻' : '☀️';
+                document.getElementById('themeDropdown').classList.remove('active');
+            };
+        }
+    </script>
+</body>
+
+</html>
